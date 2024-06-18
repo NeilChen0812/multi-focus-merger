@@ -2,7 +2,7 @@ import os
 import shutil
 import cv2
 
-video_path = './videos/P1500677.MP4'
+video_path = './videos/P1500667.MP4'
 output_folder = './temp-images'
 
 # Delete old result folder
@@ -15,7 +15,7 @@ os.makedirs(output_folder)
 vc = cv2.VideoCapture(video_path)
 frame_count = int(vc.get(cv2.CAP_PROP_FRAME_COUNT))
 print(frame_count)
-sampling_interval = 10
+sampling_interval = 5
 
 for idx in range(0, frame_count, sampling_interval):
     vc.set(1, idx)
