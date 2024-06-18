@@ -13,12 +13,11 @@ print("create folder: {}".format(output_folder))
 os.makedirs(output_folder)
 
 vc = cv2.VideoCapture(video_path)
-fps = vc.get(cv2.CAP_PROP_FPS)
 frame_count = int(vc.get(cv2.CAP_PROP_FRAME_COUNT))
 print(frame_count)
-video = []
+sampling_interval = 10
 
-for idx in range(0, frame_count, 10):
+for idx in range(0, frame_count, sampling_interval):
     vc.set(1, idx)
     ret, frame = vc.read()
 
