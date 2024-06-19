@@ -2,6 +2,7 @@ import cv2
 import os
 import math
 import numpy as np
+from tqdm import tqdm
 from tenengrad import tenengrad_rgb
 
 
@@ -26,10 +27,9 @@ def sharpness_comparison_multi_image(image_list):
     sharpest_image = None
     sharpest_value = 0
 
-    for image in image_list:
+    for image in enumerate(tqdm(image_list, desc='Sharpness Comparison')):
         sharpness_value = tenengrad_rgb(image)
         if sharpness_value > sharpest_value:
-            print(f'Sharpest Value: {sharpest_value}')
             sharpest_value = sharpness_value
             sharpest_image = image
     return sharpest_image
@@ -50,7 +50,7 @@ def partial_sharpness_comparison(image_list, part_size=100):
     sharpest_value = [[0 for i in range(num_horizontal_segments)]
                       for j in range(num_vertical_segments)]
 
-    for image in image_list:
+    for image in enumerate(tqdm(image_list, desc='Sharpness Comparison')):
         for i in range(num_vertical_segments):
             for j in range(num_horizontal_segments):
                 x_start, x_end = j*part_size, (j+1)*part_size

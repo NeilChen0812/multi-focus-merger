@@ -1,6 +1,7 @@
 import os
 import shutil
 import cv2
+from tqdm import tqdm
 
 
 def film2image(video_path, output_folder="output", sampling_interval=1):
@@ -21,19 +22,17 @@ def film2image(video_path, output_folder="output", sampling_interval=1):
     vc = cv2.VideoCapture(video_path)
     frame_count = int(vc.get(cv2.CAP_PROP_FRAME_COUNT))
 
-    for idx in range(0, frame_count, sampling_interval):
+    for idx in tqdm(range(0, frame_count, sampling_interval), desc="Extracting frames"):
         vc.set(1, idx)
         ret, frame = vc.read()
 
         if frame is not None:
-            file_name = '{}\{:04d}.jpg'.format(output_folder, idx)
+            file_name = '{}/{:04d}.jpg'.format(output_folder, idx)
             cv2.imwrite(file_name, frame)
 
-        print("\rProcess: {}/{}".format(idx+1, frame_count), end='')
     vc.release()
-    print("  (Done)")
 
 
 if __name__ == '__main__':
-    video_path = 'videos\P1500667.MP4'
-    film2image(video_path, "test", 10)
+    video_path = 'videos/P1500667.MP4'
+    film2image(video_path, "_temp-images_", 10)

@@ -1,5 +1,6 @@
 import cv2
 import numpy as np
+from tqdm import tqdm
 
 
 def contours_segmentation(image, contours):
@@ -11,22 +12,17 @@ def contours_segmentation(image, contours):
     segmented_images = []
     height, width, _ = image.shape
     all_masks = np.zeros((height, width), dtype=np.uint8)
-    contours_count = len(contours) + 1
 
-    for i, contour in enumerate(contours):
+    for i, contour in enumerate(tqdm(contours, desc='Contours segmentation', leave=False)):
         mask = np.zeros((height, width), dtype=np.uint8)
         cv2.drawContours(all_masks, [contour], -1, (255), thickness=cv2.FILLED)
         cv2.drawContours(mask, [contour], -1, (255), thickness=cv2.FILLED)
         segmented_image = cv2.bitwise_and(image, image, mask=mask)
-
         segmented_images.append(segmented_image)
-        print("\rContours segmentation: {}/{}".format(i+1, contours_count), end='')
 
     uncovered_mask = cv2.bitwise_not(all_masks)
     uncovered_regions = cv2.bitwise_and(image, image, mask=uncovered_mask)
     segmented_images.append(uncovered_regions)
-    print("\rContours segmentation: {}/{}".format(contours_count, contours_count), end='')
-    print("  (Done)")
 
     return segmented_images
 
