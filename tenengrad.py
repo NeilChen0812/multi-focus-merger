@@ -3,16 +3,23 @@ import numpy as np
 
 
 def tenengrad_rgb(image):
-    b, g, r = cv2.split(image)
+    if not isinstance(image, np.ndarray):
+        raise ValueError('Input must be a numpy array')
+    if image.ndim != 3:
+        raise ValueError('Input must be a color image')
+    if image.shape[2] != 3:
+        raise ValueError('Input must have 3 color channels')
 
-    grad_x_b = cv2.Sobel(b, cv2.CV_64F, 1, 0, ksize=3)
-    grad_y_b = cv2.Sobel(b, cv2.CV_64F, 0, 1, ksize=3)
+    b_channel, g_channel, r_channel = cv2.split(image)
 
-    grad_x_g = cv2.Sobel(g, cv2.CV_64F, 1, 0, ksize=3)
-    grad_y_g = cv2.Sobel(g, cv2.CV_64F, 0, 1, ksize=3)
+    grad_x_b = cv2.Sobel(b_channel, cv2.CV_64F, 1, 0, ksize=3)
+    grad_y_b = cv2.Sobel(b_channel, cv2.CV_64F, 0, 1, ksize=3)
 
-    grad_x_r = cv2.Sobel(r, cv2.CV_64F, 1, 0, ksize=3)
-    grad_y_r = cv2.Sobel(r, cv2.CV_64F, 0, 1, ksize=3)
+    grad_x_g = cv2.Sobel(g_channel, cv2.CV_64F, 1, 0, ksize=3)
+    grad_y_g = cv2.Sobel(g_channel, cv2.CV_64F, 0, 1, ksize=3)
+
+    grad_x_r = cv2.Sobel(r_channel, cv2.CV_64F, 1, 0, ksize=3)
+    grad_y_r = cv2.Sobel(r_channel, cv2.CV_64F, 0, 1, ksize=3)
 
     magnitude_squared = (grad_x_b**2 + grad_y_b**2 +
                          grad_x_g**2 + grad_y_g**2 +

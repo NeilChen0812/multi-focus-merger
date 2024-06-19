@@ -4,7 +4,13 @@ import cv2
 
 
 def film2image(video_path, output_folder="output", sampling_interval=1):
-    # Delete old result folder
+    if not isinstance(sampling_interval, int):
+        raise ValueError("Sampling interval must be an integer")
+    if not isinstance(output_folder, str):
+        raise ValueError("Output folder must be a string")
+    if not os.path.exists(video_path):
+        raise FileNotFoundError("Video file not found: {}".format(video_path))
+
     if os.path.exists(output_folder):
         print("Delete old result in folder: {}".format(output_folder))
         shutil.rmtree(output_folder)
@@ -23,7 +29,7 @@ def film2image(video_path, output_folder="output", sampling_interval=1):
             file_name = '{}\{:04d}.jpg'.format(output_folder, idx)
             cv2.imwrite(file_name, frame)
 
-        print("\rprocess: {}/{}".format(idx+1, frame_count), end='')
+        print("\rProcess: {}/{}".format(idx+1, frame_count), end='')
     vc.release()
     print("  (Done)")
 
