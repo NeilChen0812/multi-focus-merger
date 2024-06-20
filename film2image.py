@@ -58,6 +58,6 @@ def film2image_list(video_path, sampling_interval=1):
 
 
 if __name__ == '__main__':
-    filename = "P1500674"
+    filename = "P1500718"
     video_path = f'videos/{filename}.MP4'
-    film2image(video_path, f"_output-images_/{filename}", 1)
+    film2image(video_path, f"_temp-images-frame_/{filename}", 1)

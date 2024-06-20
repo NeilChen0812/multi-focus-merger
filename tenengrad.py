@@ -33,6 +33,6 @@ def tenengrad_rgb(image):
 
 
 if __name__ == '__main__':
-    image = cv2.imread('temp-images/0000.jpg')
+    image = cv2.imread('_temp-images-frame_/P1500718/0000.jpg')
     sharpness = tenengrad_rgb(image)
     print(f'Sharpness: {sharpness}')

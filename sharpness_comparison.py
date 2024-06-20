@@ -97,8 +97,9 @@ def get_sharpness_values(image_list):
 
 
 if __name__ == '__main__':
-    image_folder = '_temp-images-frame_'
+    foldername = "P1500718"
+    image_folder = f'_temp-images-frame_/{foldername}'
     image_list = [cv2.imread(os.path.join(image_folder, image))
                   for image in os.listdir(image_folder)]
-    sharpest_image = sharpness_comparison_multi_image(image_list)
-    cv2.imwrite('./images/sharpest_image.jpg', sharpest_image)
+    sharpest_image = partial_sharpness_comparison(image_list)
+    cv2.imwrite('./images/partial_sharpest_image02.jpg', sharpest_image)

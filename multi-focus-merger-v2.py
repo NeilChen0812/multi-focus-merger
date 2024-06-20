@@ -13,7 +13,7 @@ from film2image import film2image_list
 
 def main():
     # parameters
-    video_name = 'P1500718'
+    video_name = 'P1500667'
     video_path = f'videos/{video_name}.MP4'
     video_name = video_name + '_v2'
     sampling_interval = 1

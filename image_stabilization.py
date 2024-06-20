@@ -38,7 +38,7 @@ def calculate_translation(img1, img2):
 
 
 # 调用函数计算平移向量
-filename = "P1500674"
+filename = "P1500668"
 folder_path = f"_output-images_/{filename}"
 video_path = f'videos/{filename}.MP4'
 
@@ -68,12 +68,12 @@ height = max_y - min_y + images[0].shape[0]
 width = max_x - min_x + images[0].shape[1]
 
 fourcc = cv2.VideoWriter_fourcc(*'mp4v')
-file_name = f"translation-{folder_path}.mp4"
+file_name = f"translation-{filename}.mp4"
 if os.path.exists(file_name):
     os.remove(file_name)
 
 video = cv2.VideoWriter(
-    file_name, fourcc, 50, (width, height))
+    file_name, fourcc, 15, (width, height))
 
 for i in tqdm(range(len(cumulative_translation)), desc="Creating video"):
     image = images[i+1]
