@@ -52,7 +52,7 @@ def correct_perspective(image):
 
 # 主函數：程式的入口
 def main():
-    folder_path = '003'  # 設置資料夾路徑，用來存放待拼接的圖像
+    folder_path = '05'  # 設置資料夾路徑，用來存放待拼接的圖像
     
     images = load_images_from_folder(folder_path, scale_factor=0.5)  # 從資料夾中讀取圖像並進行縮放
     
