@@ -18,8 +18,8 @@ def main():
     video_name = video_name + '_v2'
     sampling_interval = 1
     reverse = False  # whether to process the video in reverse order
-    sharpness_threshold = 2000  # sharpness threshold for focus points
-    diff_threshold = 100  # difference threshold for focus points
+    sharpness_threshold = 1000  # sharpness threshold for focus points
+    diff_threshold = 1000  # difference threshold for focus points
     area_threshold = 5000  # contour will be ignored if area < area_threshold
     kernel_size = 5  # cv2.morphologyEx parameter
     low_threshold, high_threshold = 50, 150  # cv2.Canny parameter

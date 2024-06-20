@@ -11,7 +11,7 @@ from sharpness_comparison import sharpness_comparison
 
 def main():
     # parameters
-    video_name = 'P1500667'
+    video_name = 'P1500718'
     video_path = f'videos/{video_name}.MP4'
     sampling_interval = 1
     reverse = False  # whether to process the video in reverse order

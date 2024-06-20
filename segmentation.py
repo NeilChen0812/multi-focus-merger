@@ -2,7 +2,7 @@ import cv2
 import numpy as np
 
 
-def contours_segmentation(image, contours):
+def contours_segmentation(image, contours, area_threshold=1000):
     if not isinstance(image, np.ndarray):
         raise ValueError(
             'Input must be a numpy array but got {}'.format(type(image)))
@@ -27,8 +27,13 @@ def contours_segmentation(image, contours):
 
     # add the uncovered regions
     uncovered_mask = cv2.bitwise_not(all_masks)
-    uncovered_regions = cv2.bitwise_and(image, image, mask=uncovered_mask)
-    segmented_images.append(uncovered_regions)
+    num_labels, labels = cv2.connectedComponents(uncovered_mask)
+    for label in range(1, num_labels):
+        mask = np.zeros((height, width), dtype=np.uint8)
+        mask[labels == label] = 255
+        if np.sum(mask) >= 255 * area_threshold:
+            uncovered_regions = cv2.bitwise_and(image, image, mask=mask)
+            segmented_images.append(uncovered_regions)
 
     return segmented_images
 
