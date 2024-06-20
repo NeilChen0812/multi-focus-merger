@@ -28,12 +28,18 @@ def contours_segmentation(image, contours, area_threshold=1000):
     # add the uncovered regions
     uncovered_mask = cv2.bitwise_not(all_masks)
     num_labels, labels = cv2.connectedComponents(uncovered_mask)
+    other_regions = np.zeros((height, width), dtype=np.uint8)
     for label in range(1, num_labels):
         mask = np.zeros((height, width), dtype=np.uint8)
         mask[labels == label] = 255
         if np.sum(mask) >= 255 * area_threshold:
             uncovered_regions = cv2.bitwise_and(image, image, mask=mask)
             segmented_images.append(uncovered_regions)
+        else:
+            other_regions = cv2.bitwise_or(other_regions, mask)
+    if np.sum(other_regions) > 0:
+        other_regions = cv2.bitwise_and(image, image, mask=other_regions)
+        segmented_images.append(other_regions)
 
     return segmented_images
 
