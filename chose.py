@@ -18,12 +18,7 @@ def copy_every_second_image(source_dir, target_dir):
             print(f"Copied {image} to {target_dir}")
 
 
-<< << << < HEAD
-source_directory = '02'  # Replace with the path to your source directory
-target_directory = '05'  # Replace with the path to your target directory
-== == == =
 source_directory = '002'  # Replace with the path to your source directory
 target_directory = '008'  # Replace with the path to your target directory
->>>>>> > f4800098c7b84e4bc86dce20237c40dfbb57aef2
 
 copy_every_second_image(source_directory, target_directory)
