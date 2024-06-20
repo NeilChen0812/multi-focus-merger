@@ -1,4 +1,4 @@
-#顯示合成圖
+#顯示合成圖(最快版本)
 import cv2
 import numpy as np
 import os
