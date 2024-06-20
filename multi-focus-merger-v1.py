@@ -11,7 +11,7 @@ from sharpness_comparison import sharpness_comparison
 
 def main():
     # parameters
-    video_name = 'P1500718'
+    video_name = 'P1500667'
     video_path = f'videos/{video_name}.MP4'
     sampling_interval = 1
     reverse = False  # whether to process the video in reverse order
@@ -20,7 +20,6 @@ def main():
     low_threshold, high_threshold = 50, 150  # cv2.Canny parameter
     kuwa = False  # whether to apply Kuwahara filter before edge detection
 
-    # video_name += '-kuwa'
     frame_rate = 15
 
     # create output folder
@@ -88,15 +87,13 @@ def main():
             sharpest_image = np.zeros_like(sharpest_image)
             for sharpest_part in sharpest_parts:
                 sharpest_image = cv2.add(sharpest_image, sharpest_part)
-
             # save images processing result
             file_name = '{}/frame{:04d}.jpg'.format(output_folder, idx)
             cv2.imwrite(file_name, frame)
             file_name = '{}/edge{:04d}.jpg'.format(output_folder, idx)
-            cv2.imwrite(file_name, cv2.merge([edge, edge, edge]))
+            cv2.imwrite(file_name, edge)
             file_name = '{}/dila{:04d}.jpg'.format(output_folder, idx)
-            cv2.imwrite(file_name, cv2.merge(
-                [main_edge, main_edge, main_edge]))
+            cv2.imwrite(file_name, main_edge)
             file_name = '{}/contour{:04d}.jpg'.format(output_folder, idx)
             cv2.imwrite(file_name, cv2.drawContours(
                 frame.copy(), contours, -1, (0, 255, 0), 3))
@@ -104,8 +101,8 @@ def main():
             cv2.imwrite(file_name, sharpest_image)
 
             # save result video
-            video_edge.write(edge)
-            video_dila.write(main_edge)
+            video_edge.write(cv2.merge((edge, edge, edge)))
+            video_dila.write(cv2.merge((main_edge, main_edge, main_edge)))
             video_contour.write(cv2.drawContours(
                 frame.copy(), contours, -1, (0, 255, 0), 3))
             video_sharpest.write(sharpest_image)

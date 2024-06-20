@@ -13,7 +13,7 @@ from film2image import film2image_list
 
 def main():
     # parameters
-    video_name = 'P1500667'
+    video_name = 'P1500718'
     video_path = f'videos/{video_name}.MP4'
     video_name = video_name + '_v2'
     sampling_interval = 1
@@ -95,9 +95,9 @@ def main():
         file_name = '{}/frame{:04d}.jpg'.format(output_folder, idx)
         cv2.imwrite(file_name, frame)
         file_name = '{}/edge{:04d}.jpg'.format(output_folder, idx)
-        cv2.imwrite(file_name, cv2.merge([edge, edge, edge]))
+        cv2.imwrite(file_name, edge)
         file_name = '{}/dila{:04d}.jpg'.format(output_folder, idx)
-        cv2.imwrite(file_name, cv2.merge([main_edge, main_edge, main_edge]))
+        cv2.imwrite(file_name, main_edge)
         file_name = '{}/contour{:04d}.jpg'.format(output_folder, idx)
         cv2.imwrite(file_name, cv2.drawContours(
             frame.copy(), contours, -1, (0, 255, 0), 3))
@@ -105,8 +105,8 @@ def main():
         cv2.imwrite(file_name, sharpest_image)
 
         # save result video
-        video_edge.write(edge)
-        video_dila.write(main_edge)
+        video_edge.write(cv2.merge((edge, edge, edge)))
+        video_dila.write(cv2.merge((main_edge, main_edge, main_edge)))
         video_contour.write(cv2.drawContours(
             frame.copy(), contours, -1, (0, 255, 0), 3))
         video_sharpest.write(sharpest_image)
