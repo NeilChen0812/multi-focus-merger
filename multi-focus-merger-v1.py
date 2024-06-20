@@ -15,10 +15,13 @@ def main():
     video_path = f'videos/{video_name}.MP4'
     sampling_interval = 1
     reverse = False  # whether to process the video in reverse order
-    area_threshold = 1000  # contour will be ignored if area < area_threshold
+    area_threshold = 5000  # contour will be ignored if area < area_threshold
     kernel_size = 5  # cv2.morphologyEx parameter
     low_threshold, high_threshold = 50, 150  # cv2.Canny parameter
-    kuwa = True  # whether to apply Kuwahara filter before edge detection
+    kuwa = False  # whether to apply Kuwahara filter before edge detection
+
+    # video_name += '-kuwa'
+    frame_rate = 15
 
     # create output folder
     output_folder = f'_output-images_/{video_name}'
@@ -33,6 +36,17 @@ def main():
     vc = cv2.VideoCapture(video_path)
     frame_count = int(vc.get(cv2.CAP_PROP_FRAME_COUNT))
     sharpest_image = vc.read()[1]
+
+    # create video writer
+    fourcc = cv2.VideoWriter_fourcc(*'mp4v')
+    video_edge = cv2.VideoWriter(
+        f'{output_folder}/edge.mp4', fourcc, frame_rate, (sharpest_image.shape[1], sharpest_image.shape[0]))
+    video_dila = cv2.VideoWriter(
+        f'{output_folder}/dila.mp4', fourcc, frame_rate, (sharpest_image.shape[1], sharpest_image.shape[0]))
+    video_contour = cv2.VideoWriter(
+        f'{output_folder}/contour.mp4', fourcc, frame_rate, (sharpest_image.shape[1], sharpest_image.shape[0]))
+    video_sharpest = cv2.VideoWriter(
+        f'{output_folder}/sharpest.mp4', fourcc, frame_rate, (sharpest_image.shape[1], sharpest_image.shape[0]))
 
     # process video
     if reverse:
@@ -79,17 +93,29 @@ def main():
             file_name = '{}/frame{:04d}.jpg'.format(output_folder, idx)
             cv2.imwrite(file_name, frame)
             file_name = '{}/edge{:04d}.jpg'.format(output_folder, idx)
-            cv2.imwrite(file_name, edge)
+            cv2.imwrite(file_name, cv2.merge([edge, edge, edge]))
             file_name = '{}/dila{:04d}.jpg'.format(output_folder, idx)
-            cv2.imwrite(file_name, main_edge)
+            cv2.imwrite(file_name, cv2.merge(
+                [main_edge, main_edge, main_edge]))
             file_name = '{}/contour{:04d}.jpg'.format(output_folder, idx)
             cv2.imwrite(file_name, cv2.drawContours(
                 frame.copy(), contours, -1, (0, 255, 0), 3))
             file_name = '{}/sharpest{:04d}.jpg'.format(output_folder, idx)
             cv2.imwrite(file_name, sharpest_image)
 
+            # save result video
+            video_edge.write(edge)
+            video_dila.write(main_edge)
+            video_contour.write(cv2.drawContours(
+                frame.copy(), contours, -1, (0, 255, 0), 3))
+            video_sharpest.write(sharpest_image)
+
     # save the sharpest image
     vc.release()
+    video_edge.release()
+    video_dila.release()
+    video_contour.release()
+    video_sharpest.release()
     cv2.imwrite(f'result/{video_name}.jpg', sharpest_image)
 
 
