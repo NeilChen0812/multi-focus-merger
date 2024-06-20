@@ -1,6 +1,7 @@
 import os
 import shutil
 import cv2
+from tqdm import tqdm
 
 
 def film2image(video_path, output_folder="output", sampling_interval=1):
@@ -24,7 +25,7 @@ def film2image(video_path, output_folder="output", sampling_interval=1):
     frame_count = int(vc.get(cv2.CAP_PROP_FRAME_COUNT))
 
     # process video
-    for idx in range(0, frame_count, sampling_interval):
+    for idx in tqdm(range(0, frame_count, sampling_interval), desc='Film to images'):
         vc.set(1, idx)
         ret, frame = vc.read()
         if frame is not None:
@@ -34,6 +35,28 @@ def film2image(video_path, output_folder="output", sampling_interval=1):
     vc.release()
 
 
+def film2image_list(video_path, sampling_interval=1):
+    if not isinstance(sampling_interval, int):
+        raise ValueError("Sampling interval must be an integer")
+    if not os.path.exists(video_path):
+        raise FileNotFoundError("Video file not found: {}".format(video_path))
+
+    # load video
+    vc = cv2.VideoCapture(video_path)
+    frame_count = int(vc.get(cv2.CAP_PROP_FRAME_COUNT))
+    image_list = []
+
+    # process video
+    for idx in tqdm(range(0, frame_count, sampling_interval), desc='Film to images'):
+        vc.set(1, idx)
+        ret, frame = vc.read()
+        if frame is not None:
+            image_list.append(frame)
+    vc.release()
+
+    return image_list
+
+
 if __name__ == '__main__':
-    video_path = 'videos/P1500712.MP4'
+    video_path = 'videos/P1500718.MP4'
     film2image(video_path, "_temp-images-frame_", 1)
