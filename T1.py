@@ -27,7 +27,7 @@ def process_image(filepath, resized_images, lock):
         print(f"Failed to load image: {filename}")
 
 # 資料夾路徑和最大照片數量
-folder_path = '03'
+folder_path = '003'
 max_images = 100  # 設定照片數量上限
 
 # 讀取資料夾中的照片

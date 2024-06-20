@@ -78,7 +78,7 @@ def create_panorama(images):
     return warped_images[-1]
 
 # Read images from folder
-folder_path = r'03'
+folder_path = r'04'
 images = []
 for filename in os.listdir(folder_path):
     img_path = os.path.join(folder_path, filename)
