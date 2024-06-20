@@ -27,7 +27,7 @@ def tenengrad_rgb(image):
                          grad_x_g**2 + grad_y_g**2 +
                          grad_x_r**2 + grad_y_r**2)
 
-    sharpness = np.mean(magnitude_squared)
+    sharpness = int(np.mean(magnitude_squared))
 
     return sharpness
 
