@@ -2,8 +2,8 @@ import os
 import cv2
 import glob
 
-video_path = "P1500704.MP4"
-output_folder = '02'
+video_path = "P1500674.MP4"
+output_folder = '002'
 
 if os.path.isdir(output_folder):
     print("Delete old result folder: {}".format(output_folder))
