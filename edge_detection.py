@@ -10,9 +10,11 @@ def edge_detection_rgb(image, low_threshold=50, high_threshold=150, kuwa=False):
     if image.ndim != 3:
         raise ValueError('Input must be a color image')
 
+    # kuwahara filter
     if kuwa:
         image = kuwahara(image, method='gaussian', radius=7)
 
+    # # edge detection in rgb channel
     # b_channel, g_channel, r_channel = cv2.split(image)
     # b_edges = cv2.Canny(b_channel, low_threshold, high_threshold)
     # g_edges = cv2.Canny(g_channel, low_threshold, high_threshold)
@@ -20,6 +22,7 @@ def edge_detection_rgb(image, low_threshold=50, high_threshold=150, kuwa=False):
     # edges = cv2.bitwise_or(b_edges, g_edges)
     # edges = cv2.bitwise_or(edges, r_edges)
 
+    # edge detection in grayscale
     gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
     edges = cv2.Canny(gray, low_threshold, high_threshold)
 

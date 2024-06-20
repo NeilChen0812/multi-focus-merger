@@ -15,7 +15,7 @@ def main():
     video_path = f'videos/{video_name}.MP4'
     sampling_interval = 1
     reverse = False  # whether to process the video in reverse order
-    area_threshold = 10000  # contour will be ignored if area < area_threshold
+    area_threshold = 1000  # contour will be ignored if area < area_threshold
     kernel_size = 5  # cv2.morphologyEx parameter
     low_threshold, high_threshold = 50, 150  # cv2.Canny parameter
     kuwa = True  # whether to apply Kuwahara filter before edge detection

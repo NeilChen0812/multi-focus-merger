@@ -12,9 +12,11 @@ def find_contours(edges, area_threshold=5000):
     if edges.ndim != 2:
         raise ValueError('Input must be a binary image')
 
+    # find contours
     contours, _ = cv2.findContours(
         edges, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
 
+    # filter contours by area
     filtered_contours = []
     for contour in contours:
         area = cv2.contourArea(contour)

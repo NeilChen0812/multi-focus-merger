@@ -11,6 +11,7 @@ def film2image(video_path, output_folder="output", sampling_interval=1):
     if not os.path.exists(video_path):
         raise FileNotFoundError("Video file not found: {}".format(video_path))
 
+    # clear and create output folder
     if os.path.exists(output_folder):
         print("Delete old result in folder: {}".format(output_folder))
         shutil.rmtree(output_folder)
@@ -18,13 +19,14 @@ def film2image(video_path, output_folder="output", sampling_interval=1):
         print("Create new folder: {}".format(output_folder))
     os.makedirs(output_folder)
 
+    # load video
     vc = cv2.VideoCapture(video_path)
     frame_count = int(vc.get(cv2.CAP_PROP_FRAME_COUNT))
 
+    # process video
     for idx in range(0, frame_count, sampling_interval):
         vc.set(1, idx)
         ret, frame = vc.read()
-
         if frame is not None:
             file_name = '{}/{:04d}.jpg'.format(output_folder, idx)
             cv2.imwrite(file_name, frame)

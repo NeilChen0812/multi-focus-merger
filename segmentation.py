@@ -12,10 +12,12 @@ def contours_segmentation(image, contours):
     if contours and not all(isinstance(contour, np.ndarray) for contour in contours):
         raise ValueError('All contours must be numpy arrays')
 
+    # set up
     segmented_images = []
     height, width, _ = image.shape
     all_masks = np.zeros((height, width), dtype=np.uint8)
 
+    # segment the image based on the contours
     for i, contour in enumerate(contours):
         mask = np.zeros((height, width), dtype=np.uint8)
         cv2.drawContours(all_masks, [contour], -1, (255), thickness=cv2.FILLED)
@@ -23,6 +25,7 @@ def contours_segmentation(image, contours):
         segmented_image = cv2.bitwise_and(image, image, mask=mask)
         segmented_images.append(segmented_image)
 
+    # add the uncovered regions
     uncovered_mask = cv2.bitwise_not(all_masks)
     uncovered_regions = cv2.bitwise_and(image, image, mask=uncovered_mask)
     segmented_images.append(uncovered_regions)

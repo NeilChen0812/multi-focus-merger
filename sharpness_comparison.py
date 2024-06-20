@@ -10,8 +10,11 @@ def sharpness_comparison(image1, image2):
         raise ValueError('Input images must be numpy arrays but got {} and {}'.format(
             type(image1), type(image2)))
 
+    # calculate sharpness
     image1_sharpness = tenengrad_rgb(image1)
     image2_sharpness = tenengrad_rgb(image2)
+
+    # compare sharpness
     if image1_sharpness > image2_sharpness:
         return image1
     else:
@@ -27,11 +30,15 @@ def sharpness_comparison_multi_image(image_list):
             'All images in list must be numpy arrays but got {}'.format(
                 type(image_list[0])))
 
+    # set up
     sharpest_image = None
     sharpest_value = 0
 
+    # compare all images in the list
     for i, image in enumerate(image_list):
+        # calculate sharpness
         sharpness_value = tenengrad_rgb(image)
+        # compare sharpness
         if sharpness_value > sharpest_value:
             sharpest_value = sharpness_value
             sharpest_image = image
@@ -49,6 +56,7 @@ def partial_sharpness_comparison(image_list, part_size=100):
         raise ValueError(
             'All images in list must be numpy arrays')
 
+    # set up
     sharpest_image = image_list[0]
     height, width, _ = sharpest_image.shape
     num_vertical_segments = math.ceil(height/part_size)
@@ -56,9 +64,11 @@ def partial_sharpness_comparison(image_list, part_size=100):
     sharpest_value = [[0 for i in range(num_horizontal_segments)]
                       for j in range(num_vertical_segments)]
 
+    # compare all images in the list by parts
     for image in enumerate(image_list):
         for i in range(num_vertical_segments):
             for j in range(num_horizontal_segments):
+                # set the range of the part
                 x_start, x_end = j*part_size, (j+1)*part_size
                 y_start, y_end = i*part_size, (i+1)*part_size
                 if i == num_vertical_segments-1:
@@ -66,7 +76,9 @@ def partial_sharpness_comparison(image_list, part_size=100):
                 if j == num_horizontal_segments-1:
                     x_end = width
                 part = image[y_start:y_end, x_start:x_end]
+                # calculate sharpness
                 sharpness_value = tenengrad_rgb(part)
+                # compare sharpness
                 if sharpness_value > sharpest_value[i][j]:
                     sharpest_value[i][j] = sharpness_value
                     sharpest_image[y_start:y_end, x_start:x_end] = part
