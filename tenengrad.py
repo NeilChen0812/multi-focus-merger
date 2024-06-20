@@ -4,11 +4,11 @@ import numpy as np
 
 def tenengrad_rgb(image):
     if not isinstance(image, np.ndarray):
-        raise ValueError('Input must be a numpy array')
+        raise ValueError('Input must be a numpy array but got {}'.format(
+            type(image)))
     if image.ndim != 3:
-        raise ValueError('Input must be a color image')
-    if image.shape[2] != 3:
-        raise ValueError('Input must have 3 color channels')
+        raise ValueError('Input must be a color image but got {} image dimension'.format(
+            image.ndim))
 
     b_channel, g_channel, r_channel = cv2.split(image)
 

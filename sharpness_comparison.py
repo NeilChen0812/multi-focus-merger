@@ -2,13 +2,13 @@ import cv2
 import os
 import math
 import numpy as np
-from tqdm import tqdm
 from tenengrad import tenengrad_rgb
 
 
 def sharpness_comparison(image1, image2):
     if not isinstance(image1, np.ndarray) or not isinstance(image2, np.ndarray):
-        raise ValueError('Input images must be numpy arrays')
+        raise ValueError('Input images must be numpy arrays but got {} and {}'.format(
+            type(image1), type(image2)))
 
     image1_sharpness = tenengrad_rgb(image1)
     image2_sharpness = tenengrad_rgb(image2)
@@ -20,14 +20,17 @@ def sharpness_comparison(image1, image2):
 
 def sharpness_comparison_multi_image(image_list):
     if not isinstance(image_list, list):
-        raise ValueError('Input must be a list of images')
+        raise ValueError(
+            'Input must be a list of images but got {}'.format(type(image_list)))
     if not all(isinstance(image, np.ndarray) for image in image_list):
-        raise ValueError('All images in list must be numpy arrays')
+        raise ValueError(
+            'All images in list must be numpy arrays but got {}'.format(
+                type(image_list[0])))
 
     sharpest_image = None
     sharpest_value = 0
 
-    for image in enumerate(tqdm(image_list, desc='Sharpness Comparison')):
+    for i, image in enumerate(image_list):
         sharpness_value = tenengrad_rgb(image)
         if sharpness_value > sharpest_value:
             sharpest_value = sharpness_value
@@ -37,11 +40,14 @@ def sharpness_comparison_multi_image(image_list):
 
 def partial_sharpness_comparison(image_list, part_size=100):
     if not isinstance(part_size, int):
-        raise ValueError('Part size must be an integer')
+        raise ValueError(
+            'Part size must be an integer but got {}'.format(type(part_size)))
     if not isinstance(image_list, list):
-        raise ValueError('Input must be a list of images')
+        raise ValueError(
+            'Input must be a list of images but got {}'.format(type(image_list)))
     if not all(isinstance(image, np.ndarray) for image in image_list):
-        raise ValueError('All images in list must be numpy arrays')
+        raise ValueError(
+            'All images in list must be numpy arrays')
 
     sharpest_image = image_list[0]
     height, width, _ = sharpest_image.shape
@@ -50,7 +56,7 @@ def partial_sharpness_comparison(image_list, part_size=100):
     sharpest_value = [[0 for i in range(num_horizontal_segments)]
                       for j in range(num_vertical_segments)]
 
-    for image in enumerate(tqdm(image_list, desc='Sharpness Comparison')):
+    for image in enumerate(image_list):
         for i in range(num_vertical_segments):
             for j in range(num_horizontal_segments):
                 x_start, x_end = j*part_size, (j+1)*part_size
@@ -68,8 +74,8 @@ def partial_sharpness_comparison(image_list, part_size=100):
 
 
 if __name__ == '__main__':
-    image_folder = 'temp-images'
+    image_folder = '_temp-images-frame_'
     image_list = [cv2.imread(os.path.join(image_folder, image))
                   for image in os.listdir(image_folder)]
-    sharpest_image = partial_sharpness_comparison(image_list, 50)
-    cv2.imwrite('./images/partial_sharpest_image.jpg', sharpest_image)
+    sharpest_image = sharpness_comparison_multi_image(image_list)
+    cv2.imwrite('./images/sharpest_image.jpg', sharpest_image)
